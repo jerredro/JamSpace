@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Jam Space</title>
+	<link rel="stylesheet" href="../static/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../static/css/dashstyle.css">
+</head>
+
+<body>
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<p class="navbar-text navbar-left"><img src="../static/images/jam_space.png" width="5%" length="5%"> Jam
+					Space <small>A place for musicians</small></p>
+				<ul class="nav navbar-nav navbar-right pull-right">
+					<!--<li>
+						<a href="#" class='btn navbar-btn-sm'>Your Gear Space</a> 
+					</li>
+					<li>
+						<a href="#" class='btn navbar-btn-sm'>Rehearsal Space</a>
+					</li>-->
+					<li>
+						<a href="/logout" class='btn navbar-btn-sm'>Logout </a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<form action='/post' class='container' method='post' id='msg'>
+		<h3>Hello, {{ session['username'] }}</h3>
+		<input type="hidden" name="post">
+		<div class="form-group col-xs-10 col-sm-6 col-md-5 col-lg-4">
+			<label for="post">Post:</label>
+			<textarea name='content' id='post' class='form-control' rows='5'></textarea>
+		</div>
+		<div class="form-group col-sm-10">
+			<input type="submit" class='btn btn-default' value='Post'>
+		</div>
+	</form>
+	<hr>
+{% if posts %}
+	{% for post in posts %}
+	<div class="post container">
+		<span><b>{{ post['username'] }} posted:</b></span>
+			<p>{{ post['content'] }}</p>
+	
+		<form method="POST" action="/deletePost">
+			<input type="hidden" name="_method" value="DELETE" />
+			<input type="hidden" name="id" value="{{ post['id'] }}" />
+			<input type="submit" value="Delete" />
+		</form>
+
+	</div>
+	<div id='comment' class='comment container'>
+		{% if comments %}
+			{% for comment in comments %}
+				{% if post['id'] == comment['post_id'] %}
+				<span><b>{{comment['username']}} commented:</b></span>
+				<p>{{ comment['content'] }}</p>
+					{% if comment['user_id'] == session['id'] %}
+					<form method="POST" action="/deleteComment">
+						<input type="hidden" name="_method" value="DELETE" />
+						<input type="hidden" name="id" value="{{ comment['id'] }}" />
+						<input type="submit" value="Delete" />
+					</form>
+					{% endif %}
+				{% endif %}
+			{% endfor %}
+		{% endif %}
+		<form action='/post' method='post' class='container' id='cmt'>
+			<input type="hidden" name="comment">
+			<input type="hidden" name="post_id" value="{{ post['id'] }}" />
+			<div class="form-group col-xs-10 col-sm-6 col-md-5 col-lg-4">
+				<label for="comment ">Add a Comment:</label>
+				<textarea name='content' id='comment' class='form-control' rows='3'></textarea>
+			</div>
+			<div class="form-group col-sm-10">
+				<input type="submit" class='btn btn-default btn-sm' value='Comment'>
+			</div>
+		</form>
+	</div>
+	<hr>
+	<br>
+	{% endfor %}
+{% endif %}
+
+</body>
+
+</html>

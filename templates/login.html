@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Login | Jam Space</title>
+	<link rel="stylesheet" href="../static/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../static/css/dashstyle.css">
+</head>
+<body>
+	<div class="header">
+		<div class="logo">
+			<h1>Jam Space <small>A place for musicians to <i>keep your bandmates updated!</i></small></h1>
+		</div>
+		{% with messages = get_flashed_messages() %}
+		{% if messages %}
+		{% for message in messages %}
+		<div class="alert alert-danger" role='alert'>
+			<p>{{message}}</p>
+		</div>
+		<br>
+		{% endfor %}
+		{% endif %}
+		{% endwith %}
+	</div>
+	
+	{% if session['reg'] != True %}
+	<div id='form' class='container'>
+		<h2>Register</h2>
+		<form action='/process' method='post' class='form-horizontal'>
+			<input type="hidden" name="register">
+			<div class="form-group">
+				<div class="col-sm-12 col-md-12 col-lg-12">
+					<label for='name'>Username:</label>
+					<input type="text" class='form-control' name="username" id='name'>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-12 col-md-12 col-lg-12">
+					<label for='email'>Email:</label>
+					<input type="text" class='form-control' name="email" id='email'>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-12 col-md-12 col-lg-12">
+					<label for='pwd'>Password:</label>
+					<input type="password" class='form-control' name="password" id='pwd'>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-12 col-md-12 col-lg-12">
+					<label for='cpwd'>Confirm Password:</label>
+					<input type="password" class='form-control' name="c_password" id='cpwd'>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-10">
+					<input type="submit" class='btn btn-primary' value='Register'>
+				</div>
+			</div>
+		</form>
+		<form action="/" method='post' class='toggle'>
+			<input type="hidden" value=''>
+			<a>Have an account? Login here!</a>
+		</form>
+	</div>
+{% endif %}
+{% if session['reg'] == True %}
+	<div id='form2' class='container'>
+		<h2>Login</h2>
+		<form action='/process' method='post' class='form-horizontal'>
+			<input type="hidden" name="login">
+			<div class="form-group">
+				<div class="col-sm-12 col-md-12 col-lg-12">
+					<label for="email_l">Email:</label>
+					<input type="text" class='form-control' name="email" id="email_l">
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-12 col-md-12 col-lg-12">
+					<label for="pwd_l">Password:</label>
+					<input type="password" class='form-control' name="password" id='pwd_l'>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-10">
+					<input type="submit" class='btn btn-primary' value='Login'>
+				</div>
+			</div>
+		</form>
+		<form action="/" method='post' class='toggle'>
+			<input type="hidden" value=''>
+			<a>Don't have an account? Register here!</a>
+		</form>
+	</div>
+{% endif %}
+</body>
+<script src="../static/js/jquery-3.1.1.min.js" charset="utf-8"></script>
+<script src="../static/js/bootstrap.min.js" charset="utf-8"></script>
+<script>
+	$('.toggle a').on("click", function(){
+		$('.toggle').submit()
+	})
+</script>
+
+</html>
